@@ -109,7 +109,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { ShoppingCart } from "lucide-react";
 
@@ -126,7 +126,7 @@ const Navbar = () => {
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [showResults, setShowResults] = useState(false);
 
-  const router = useRouter();
+  // const router = useRouter();
   const { user } = useAuth();
   const { cart } = useCart();
 
