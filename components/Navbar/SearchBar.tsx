@@ -2,7 +2,7 @@
 import { SearchBarProps } from "@/app/interfaces";
 
 const SearchBar = ({ value, onChange }: SearchBarProps) => (
-  <div className="flex items-center bg-white dark:bg-neutral-800 rounded-xl px-1 py-1 w-full max-w-xl shadow-md transition-colors duration-300">
+<div className="flex items-center w-full bg-white dark:bg-neutral-800 rounded-xl shadow-md px-2 py-1">
     <input
       type="text"
       placeholder="Buscar productos..."
