@@ -1,6 +1,6 @@
 import Login from "@/components/Login/Login";
 
-const page = () => {
+const Page = () => {
   return (
     <main className="container">
 
@@ -8,4 +8,4 @@ const page = () => {
     </main>
   );
 };
-export default page;
+export default Page;

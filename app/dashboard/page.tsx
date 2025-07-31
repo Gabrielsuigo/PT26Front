@@ -4,7 +4,7 @@ import AuthProtected from "@/components/AuthProtected/AuthProtected";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
 
-const page = () => {
+const Page = () => {
   const { user: authUser, orders } = useAuth();
   const { cart } = useCart();
   const user = authUser?.user;
@@ -199,4 +199,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

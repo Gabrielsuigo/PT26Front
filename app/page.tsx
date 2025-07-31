@@ -3,7 +3,7 @@ import CardList from "@/components/CardList/CardList";
 import Hero from "@/components/Hero/Hero";
 import { getFeaturedProducts } from "@/service/products";
 
-const page = async () => {
+const Page = async () => {
   const products = await getFeaturedProducts() 
   return (
     <>
@@ -16,7 +16,7 @@ const page = async () => {
     </>
   );
 };
-export default page;
+export default Page;
           
 
 

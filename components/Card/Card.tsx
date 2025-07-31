@@ -5,7 +5,9 @@ import Link from "next/link";
 import { useCart } from "@/contexts/CartContext";
 import { ShoppingCart } from "lucide-react";
 
-interface CardProps extends Product {}
+interface CardProps extends Product {
+  showPrice?: boolean;
+}
 
 const Card = ({ name, image, price, id, ...rest }: CardProps) => {
   const { cart, addToCart } = useCart();

@@ -2,7 +2,7 @@ import ProductDetail from "@/components/productDetail/productDetail";
 import { getProductsId } from "@/service/products";
 import { notFound } from "next/navigation";
 
-const page = async ({ params }: { params: { id: string } }) => {
+const Page = async ({ params }: { params: { id: string } }) => {
   const { id } = params;
   const product = await getProductsId(Number(id));
 
@@ -17,4 +17,4 @@ const page = async ({ params }: { params: { id: string } }) => {
   );
 };
 
-export default page;
+export default Page;
