@@ -16,9 +16,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+        <AuthProvider>
     <html lang="es">
         <body className="flex flex-col min-h-screen bg-white text-black transition-colors duration-300 font-sans">
-        <AuthProvider>
           <CartProvider>
             <Navbar />
             <main className="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-0 py-6">
@@ -26,8 +26,8 @@ export default function RootLayout({
             </main>
             <Footer />
           </CartProvider>
-    </AuthProvider>
         </body>
       </html>
+    </AuthProvider>
   );
 }
