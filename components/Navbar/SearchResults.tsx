@@ -55,7 +55,7 @@ import { ProductListProps } from "@/app/interfaces";
 const SearchResults = ({ products, onClick }: ProductListProps) => {
   const router = useRouter();
 
-  if (products.length === 0) return null;
+  if (!products || products.length === 0) return null;
 
   const handleClick = (id: number) => {
     router.push(`/products/${id}`);
