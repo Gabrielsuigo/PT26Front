@@ -65,7 +65,7 @@ const Navbar = () => {
   return (
     <>
       <nav className="bg-white dark:bg-black text-black dark:text-white py-4 shadow-md border-b border-neutral-200 dark:border-neutral-800 z-50 relative">
-        <div className="flex items-center justify-between gap-2 px-4 w-full max-w-7xl mx-auto flex-wrap sm:flex-nowrap">
+         <div className="flex flex-wrap md:flex-nowrap items-center justify-between gap-4 px-4 w-full max-w-7xl mx-auto">
           {/* Logo */}
           <Link href="/" className="flex items-center hover:scale-105 transition duration-300 shrink-0">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" className="w-8 h-8 fill-black dark:fill-white">
