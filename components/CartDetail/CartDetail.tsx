@@ -11,9 +11,31 @@ const CartDetail = () => {
   const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
   const [loading, setIsLoading] = useState(false);
 
-  const handleBuy = async () => {
-    setIsLoading(true);
+const handleBuy = async () => {
+  setIsLoading(true);
 
+  try {
+    // Validación: buscar productos repetidos ya comprados
+    const purchasedProductIds =
+      Array.isArray(orders) && orders.length > 0
+        ? orders.flatMap((order) =>
+            Array.isArray(order.products)
+              ? order.products.map((p: any) => p.id)
+              : []
+          )
+        : [];
+
+    const duplicated = cart.find((item) =>
+      purchasedProductIds.includes(item.id)
+    );
+
+    if (duplicated) {
+      alert(`⚠️ Ya compraste "${duplicated.name}". Solo se permite una unidad.`);
+      setIsLoading(false);
+      return;
+    }
+
+    // Procesar orden normalmente
     const res = await postOrders(user?.user.id || 0, user?.token || "", cart);
 
     if (res.status === "approved") {
@@ -39,13 +61,11 @@ const CartDetail = () => {
         date: new Date().toISOString(),
       };
 
-      // Guardar orden completa
       localStorage.setItem(
         `compra-${user?.user.id}-${res.id}`,
         JSON.stringify(fullOrderData)
       );
 
-      // Actualizar historial de órdenes
       const prevOrders = JSON.parse(
         localStorage.getItem(`orders-${user?.user.id}`) || "[]"
       );
@@ -54,17 +74,19 @@ const CartDetail = () => {
         JSON.stringify([...prevOrders, newOrder])
       );
 
-      // Guardar usuario (opcional)
       localStorage.setItem("user", JSON.stringify(user));
 
-      alert(`Order ID: ${res.id}`);
+      alert(`✅ Compra realizada. Order ID: ${res.id}`);
       emptyCart();
-    } else {
-      alert("Error al procesar la orden");
     }
+  } catch (error: any) {
+    console.error("Error en handleBuy:", error);
+    alert("Ocurrió un error al procesar la orden.");
+  }
 
-    setIsLoading(false);
-  };
+  setIsLoading(false);
+};
+
 
   return (
     <div className="max-w-4xl mx-auto my-16 px-6 py-12 bg-white dark:bg-black text-black dark:text-white rounded-3xl border border-gray-300 dark:border-gray-700 shadow-xl transition-colors">

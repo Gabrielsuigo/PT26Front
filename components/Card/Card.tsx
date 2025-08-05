@@ -3,6 +3,7 @@
 import { Product } from "@/app/interfaces";
 import Link from "next/link";
 import { useCart } from "@/contexts/CartContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { ShoppingCart } from "lucide-react";
 
 interface CardProps extends Product {
@@ -11,19 +12,29 @@ interface CardProps extends Product {
 
 const Card = ({ name, image, price, id, ...rest }: CardProps) => {
   const { cart, addToCart } = useCart();
+  const { user } = useAuth();
 
   const cartItem = cart.find((item) => item.id === id);
   const quantity = cartItem ? cartItem.quantity : 0;
 
   const handleCartClick = () => {
-    if (cartItem) return (window.location.href = "/cart");
+    if (!user?.login) {
+      alert("Por favor inicia sesión para agregar productos al carrito.");
+      return;
+    }
+
+  if (cartItem) {
+    alert("Este producto ya está en el carrito. Solo se permite una unidad.");
+    return;
+  }
+
     const product = { id, name, price, quantity: 1, ...rest };
     addToCart(product);
+    alert("Producto agregado al carrito.");
   };
 
   return (
     <article className="w-[400px] transition-all duration-300 ease-in-out transform hover:shadow-lg p-6 rounded-3xl border border-neutral-300 dark:border-neutral-700 bg-[#f3f4f6] dark:bg-[#1f1f1f] text-black dark:text-white">
-
       <img
         src={image}
         alt={name}

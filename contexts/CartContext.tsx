@@ -31,34 +31,32 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuth();
   const userId = user?.user?.id;
 
-  useEffect(() => {
-    if (userId) {
-      const saved = localStorage.getItem(`cart-${userId}`);
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved);
-          const savedTime = new Date(parsed.timestamp);
-          const now = new Date();
-          const hoursPassed =
-            (now.getTime() - savedTime.getTime()) / (1000 * 60 * 60);
+useEffect(() => {
+  if (!userId) return; // Esperar a que haya un userId válido
 
-          if (hoursPassed > CART_EXPIRATION_HOURS) {
-            localStorage.removeItem(`cart-${userId}`);
-            setCart([]);
-            alert("Tu carrito expiró por inactividad.");
-          } else {
-            setCart(parsed.items || []);
-          }
-        } catch {
-          setCart([]);
-        }
-      } else {
+  const saved = localStorage.getItem(`cart-${userId}`);
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      const savedTime = new Date(parsed.timestamp);
+      const now = new Date();
+      const hoursPassed =
+        (now.getTime() - savedTime.getTime()) / (1000 * 60 * 60);
+
+      if (hoursPassed > CART_EXPIRATION_HOURS) {
+        localStorage.removeItem(`cart-${userId}`);
         setCart([]);
+        alert("Tu carrito expiró por inactividad.");
+      } else {
+        setCart(parsed.items || []);
       }
-    } else {
+    } catch {
       setCart([]);
     }
-  }, [userId]);
+  } else {
+    setCart([]);
+  }
+}, [userId]);
 
   useEffect(() => {
     if (userId) {
@@ -78,19 +76,16 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     setCart([]);
   };
 
-  const addToCart = (item: Cart) => {
-    setCart((prev) => {
-      const existing = prev.find((p) => p.id === item.id);
-      if (existing) {
-        return prev.map((p) =>
-          p.id === item.id
-            ? { ...p, quantity: p.quantity + item.quantity }
-            : p
-        );
-      }
-      return [...prev, item];
-    });
-  };
+const addToCart = (item: Cart) => {
+  setCart((prev) => {
+    const exists = prev.some((p) => Number(p.id) === Number(item.id));
+    if (exists) {
+      alert("Ya tienes este producto en el carrito. Solo se permite una unidad.");
+      return prev; // No lo agregues de nuevo
+    }
+    return [...prev, item];
+  });
+};
 
   return (
     <CartContext.Provider value={{ cart, setCart, addToCart, emptyCart }}>

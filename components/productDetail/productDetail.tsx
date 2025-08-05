@@ -19,29 +19,34 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
   const router = useRouter();
   const { id, name, price, image, description } = product;
 
-  const isOnCart = cart?.some((item) => item.id === id);
+const isOnCart = cart?.some((item) => Number(item.id) === Number(id));
 
-  const handleAddToCart = () => {
-    if (user?.login) {
-      const confirmAdd = confirm("¿Deseas agregar este producto al carrito?");
-      if (confirmAdd) {
-        const newItem = { id, name, price, quantity: 1 };
-
-        if (Array.isArray(cart)) {
-          setCart([...cart, newItem]);
-        } else {
-          setCart([newItem]);
-        }
-
-        alert("¡Producto agregado al carrito!");
-      }
-    } else {
-      alert("Por favor inicia sesión para agregar productos al carrito");
-      setTimeout(() => {
-        router.push("/login");
-      }, 1000);
+const handleAddToCart = () => {
+  if (user?.login) {
+    if (isOnCart) {
+      alert("Ya tienes este producto en el carrito. Solo se permite una unidad.");
+      return;
     }
-  };
+
+    const confirmAdd = confirm("¿Deseas agregar este producto al carrito?");
+    if (confirmAdd) {
+      const newItem = { id, name, price, quantity: 1 };
+
+      if (Array.isArray(cart)) {
+        setCart([...cart, newItem]);
+      } else {
+        setCart([newItem]);
+      }
+
+      alert("¡Producto agregado al carrito!");
+    }
+  } else {
+    alert("Por favor inicia sesión para agregar productos al carrito");
+    setTimeout(() => {
+      router.push("/login");
+    }, 1000);
+  }
+};
 
   return (
     <article className="backdrop-blur-md bg-white/30 dark:bg-black/30 text-black dark:text-white rounded-3xl shadow-xl p-6 mt-12 mb-12 max-w-6xl mx-auto border border-black/20 dark:border-white/20 transition-colors">
