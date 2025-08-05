@@ -1,6 +1,6 @@
 "use client";
 import { useAuth } from "@/contexts/AuthContext";
-import { useCart } from "@/contexts/CartContext";
+import { Cart, useCart } from "@/contexts/CartContext";
 import { postOrders } from "@/service/orders";
 import { useState } from "react";
 
@@ -9,7 +9,7 @@ const CartDetail = () => {
   const { cart, emptyCart } = useCart();
 
   const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  const [loading, setIsLoading] = useState(false);
+  const [loading, setIsLoading] = useState<boolean>(false);
 
 const handleBuy = async () => {
   setIsLoading(true);
@@ -20,7 +20,7 @@ const handleBuy = async () => {
       Array.isArray(orders) && orders.length > 0
         ? orders.flatMap((order) =>
             Array.isArray(order.products)
-              ? order.products.map((p: any) => p.id)
+              ? order.products.map((p: Cart) => p.id)
               : []
           )
         : [];
@@ -79,10 +79,15 @@ const handleBuy = async () => {
       alert(`✅ Compra realizada. Order ID: ${res.id}`);
       emptyCart();
     }
-  } catch (error: any) {
-    console.error("Error en handleBuy:", error);
+} catch (error) {
+  if (error instanceof Error) {
+    console.error("Error en handleBuy:", error.message);
     alert("Ocurrió un error al procesar la orden.");
+  } else {
+    console.error("Error desconocido en handleBuy:", error);
+    alert("Ocurrió un error desconocido.");
   }
+}
 
   setIsLoading(false);
 };
