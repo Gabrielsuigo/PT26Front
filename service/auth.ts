@@ -1,6 +1,11 @@
 import { UserData, UserLogin } from "@/app/interfaces";
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+// const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+if (!apiUrl) {
+  throw new Error("❌ Falta configurar NEXT_PUBLIC_API_URL en el entorno");
+}
 
 export const register = async (Data: UserData) => {
   const res = await fetch(`${apiUrl}/users/register`, {

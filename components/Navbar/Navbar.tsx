@@ -20,37 +20,35 @@ const Navbar = () => {
   const { user } = useAuth();
   const { cart } = useCart();
 
-  useEffect(() => {
-    const delayDebounce = setTimeout(() => {
-      const search = async () => {
-        if (searchTerm.trim().length >= 2) {
-          try {
-            const res = await fetch(
-              `${process.env.NEXT_PUBLIC_API_URL}/products?name=${encodeURIComponent(searchTerm)}`
-            );
-            if (res.ok) {
-              const data = await res.json();
-              setFilteredProducts(data);
-              setShowResults(true);
-            } else {
-              setFilteredProducts([]);
-              setShowResults(false);
-            }
-          } catch (error) {
-            console.error("Error buscando productos:", error);
-            setFilteredProducts([]);
-            setShowResults(false);
-          }
+useEffect(() => {
+  const delayDebounce = setTimeout(async () => {
+    if (searchTerm.trim().length >= 2) {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`);
+        if (res.ok) {
+          const data: Product[] = await res.json();
+          const filtered = data.filter((product) =>
+            product.name.toLowerCase().includes(searchTerm.toLowerCase())
+          );
+          setFilteredProducts(filtered);
+          setShowResults(filtered.length > 0);
         } else {
           setFilteredProducts([]);
           setShowResults(false);
         }
-      };
-      search();
-    }, 400);
+      } catch (error) {
+        console.error("Error buscando productos:", error);
+        setFilteredProducts([]);
+        setShowResults(false);
+      }
+    } else {
+      setFilteredProducts([]);
+      setShowResults(false);
+    }
+  }, 400);
 
-    return () => clearTimeout(delayDebounce);
-  }, [searchTerm]);
+  return () => clearTimeout(delayDebounce);
+}, [searchTerm]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);

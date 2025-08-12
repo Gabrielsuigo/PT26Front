@@ -1,16 +1,19 @@
 import { Product } from "@/app/interfaces";
 
-// const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
-const apiUrl = process.env.NEXT_PUBLIC_API_URL
+// const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001"
 
-
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+if (!apiUrl) {
+  throw new Error("❌ Falta configurar NEXT_PUBLIC_API_URL en el entorno");
+}
 // Obtener todos los productos
 export const getProducts = async (): Promise<Product[]> => {
-  const res = await fetch(`${apiUrl}/products`, { cache: "no-store" });
 
-  if (!res.ok) {
-    throw new Error("Error al obtener productos desde la API");
+ const res = await fetch(`${apiUrl}/products`, {
+  headers: {
+    "Accept": "application/json",
   }
+});
 
   const data = await res.json();
   return data;
