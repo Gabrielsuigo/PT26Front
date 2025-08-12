@@ -13,7 +13,8 @@ export const register = async (Data: UserData) => {
     body: JSON.stringify(Data),
     headers: {
       "Content-Type": "application/json",
-    },
+    Accept: "application/json",
+   },
   });
   return await res.json();
 };
@@ -24,6 +25,7 @@ export const login = async (Data: UserLogin) => {
     body: JSON.stringify(Data),
     headers: {
       "Content-Type": "application/json",
+    Accept: "application/json",
     },
   });
   return await res.json();

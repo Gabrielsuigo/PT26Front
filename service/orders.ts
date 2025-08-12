@@ -1,12 +1,6 @@
 import { Cart } from "@/contexts/CartContext";
 
-// const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
-
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-if (!apiUrl) {
-  throw new Error("❌ Falta configurar NEXT_PUBLIC_API_URL en el entorno");
-}
-
+const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
 export const postOrders = async (
   userId: number,
@@ -22,8 +16,17 @@ export const postOrders = async (
       headers: {
         "Content-Type": "application/json",
         Authorization: token,
+        Accept: "application/json",
       },
     });
+
+//      if (!res.ok) {
+//     const errorData = await res.json().catch(() => ({}));
+//     throw new Error(errorData.message || "Error al registrar la orden");
+//   }
+
+//   return res.json();
+// };
 
     if (!res.ok) {
       // Si la respuesta no fue exitosa (status fuera del 200–299)
